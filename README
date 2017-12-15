@@ -1,0 +1,11 @@
+Usage: ./submit_openQA_jobs.sh <-i ISO> [-t ENTRY] [-a ADDON] [-e ENVFILE] [-d] [-h]
+    -i ISO      The ISO image to test. 
+    -a ADDON    The ADDON image to test. 
+                Multi ADDONs can be specified by: -a sdk.iso -a we.iso
+    -t ENTRY    Top level entry type: jobs, workers, isos (default: isos)
+    -e ENVFILE  ENV file contains environment variables. 
+                Multi files can be specified by: -e 1.env -e 2.env
+    -d          Dry run, just print the command line.
+    -h          Print this help info
+For example:
+    ./submit_openQA_jobs.sh # -i SLE-12-SP2-Server-DVD-x86_64-Build2141-Media1.iso -a SLE-12-SP2-WE-DVD-x86_64-Build0400-Media1.iso
