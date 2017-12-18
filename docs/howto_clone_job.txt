@@ -1,0 +1,6 @@
+# Example of clone job to localhost:
+/usr/share/openqa/script/clone_job.pl --from localhost --host localhost --skip-deps --skip-download JOB_ID [VARS]
+
+# Example of clone job to o.s.d:
+/usr/share/openqa/script/clone_job.pl --from https://openqa.suse.de --host https://openqa.suse.de --apikey <key> --apisecret <secret> --skip-deps --skip-download JOB_ID [VARS]
+
