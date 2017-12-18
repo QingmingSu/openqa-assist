@@ -20,7 +20,11 @@ Usage: $0 <-i ISO> [-t ENTRY] [-a ADDON] [-e ENVFILE] [-d] [-h]
     -d          Dry run, just print the command line.
     -h          Print this help info
 For example:
-    $0 # -i SLE-12-SP2-Server-DVD-x86_64-Build2141-Media1.iso -a SLE-12-SP2-WE-DVD-x86_64-Build0400-Media1.iso
+    # To trigger job group:
+    $0 -i SLE-12-SP2-Server-DVD-x86_64-Build2141-Media1.iso -a SLE-12-SP2-WE-DVD-x86_64-Build0400-Media1.iso
+
+    # To trigger single job:
+    ./submit_openQA_jobs.sh -i SLE-12-SP3-Server-DVD-x86_64-GM-DVD1.iso -t jobs -e tests/install/create_hdd_sle12sp3.env
 EOF
 }
 
@@ -121,12 +125,24 @@ done
 addons_all=$(echo $addons_all | sed 's/\ *//g') 
 [ $addon_no -ne 0 ] && VARS+=" ADDONS=\'$addons_all\'"
  
-# Parse ENVFILES  
+# Parse ENVFILES in add included configs 
+envs_all=""
 for myenv in $ENVFILES; do
     myenv_abs=$(readlink -f $myenv)
     [ ! -f "$myenv_abs" ] && echo "ERROR: No such file: $myenv" && exit 1
-    VARS+=" $(cat $myenv | xargs)"
+    myenv_inc=""
+    for x in `grep '^#INCLUDE' $myenv_abs`; do
+        [ x$x == "#INCLUDE" ] && continue
+        if [ -f "$x" ]; then
+            myenv_inc+=" $(readlink -f $x)"
+        fi
+    done
+    envs_all+=" $myenv_inc $myenv_abs"
+done
+# Read vars from env files
+for env in $envs_all; do
     #source $myenv
+    VARS+=" $(cat $env | grep -v '^#' | xargs)"
 done
 
 BASE_CMD="$OPENQA_CLI $ENTRY $METHOD ISO=$ISO DISTRI=$DISTRI VERSION=$VERSION FLAVOR=$FLAVOR ARCH=$ARCH BUILD=$BUILD"
