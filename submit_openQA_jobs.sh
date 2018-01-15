@@ -74,6 +74,12 @@ if [ $DISTRI == "sle" ]; then
         *) echo "ERROR: Invalid product name: $prod"; exit 1;;
     esac
     index=$(($index + 1))
+elif [ x"$DISTRI" == "xopensuse" ]; then
+    if [ x"$VERSION" == "xLeap" ]; then
+        prod='Leap'
+        VERSION=$(get_var $index)
+        index=$(($index + 1))
+    fi
 fi
 media=$(get_var $index)
 if [ x"$media" = "xDVD" ]; then
@@ -93,12 +99,12 @@ fi
 index=$(($index + 1))
 ARCH=$(get_var $index)
 index=$(($index + 1))
-if [ $DISTRI == "sle" ]; then
+if [[ x"$DISTRI" == 'xsle' || x"$prod" == 'xLeap' ]]; then
     BUILD=$(get_var $index | sed 's/Build//g')
     if ! (echo $ISO | grep -q "GM"); then
         VARS="BETA=1"
     fi
-elif [ $DISTRI == "opensuse" ]; then
+elif [[ x"$DISTRI" == 'xopensuse' && x"$VERSION" == 'xTumbleweed' ]]; then
     BUILD=$(get_var $index | sed 's/Snapshot//g')
 fi
 
