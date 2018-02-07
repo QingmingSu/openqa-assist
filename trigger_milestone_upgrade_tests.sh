@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OPENQA_CLI="/usr/share/openqa/script/client"
-OPENQARC="/home/${USER}/.openqarc"
+OPENQARC="${HOME}/.openqarc"
 HOST="https://openqa.suse.de"
 ARCHES="aarch64 x86_64 ppc64le s390x"
 DRY_RUN=0
