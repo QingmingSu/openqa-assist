@@ -20,6 +20,6 @@ while true; do
     worker="openqa-worker@${worker_id}"
     (grep -q "^\[${worker_id}\]" /etc/openqa/workers.ini) || break
     echo "restart $worker"
-    systemctl stop ${worker}
+    systemctl restart ${worker}
     worker_id=$(($worker_id + 1))
 done
